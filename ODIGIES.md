@@ -1,30 +1,15 @@
 # Βήμα-βήμα: πώς ανεβαίνει στο GitHub και μπαίνει στο κινητό του πατέρα
 
-## ΜΕΡΟΣ Α — Ανέβασμα στο GitHub (μία φορά, από τον υπολογιστή)
+## ΜΕΡΟΣ Α — Το ανέβασμα (ΕΓΙΝΕ ΗΔΗ)
 
-1. Μπες στο **github.com** με τον λογαριασμό `nikolaskahris-png`.
-2. Πάνω δεξιά πάτα το **+** → **New repository**.
-3. Στο **Repository name** γράψε: `lista-kopis`
-4. Διάλεξε **Public** (πρέπει να είναι Public για να δουλέψει δωρεάν το GitHub Pages).
-5. **ΜΗΝ** τσεκάρεις τίποτα άλλο (ούτε README). Πάτα **Create repository**.
-6. Στην επόμενη σελίδα πάτα τον σύνδεσμο **uploading an existing file**.
-7. Άνοιξε τον φάκελο `C:\Users\nikol\Desktop\ksyloyrgiko\xylourgos-app`, διάλεξε **όλα** τα αρχεία
-   (Ctrl+A) και σύρ' τα μέσα στη σελίδα του GitHub.
-   Πρέπει να ανέβουν και τα 11:
-   `index.html`, `kanones.js`, `sw.js`, `test.js`, `manifest.webmanifest`,
-   `eikonidio.svg`, `eikonidio-180.png`, `eikonidio-192.png`, `eikonidio-512.png`,
-   `README.md`, `ODIGIES.md`
-   *(Το αρχείο `.nojekyll` είναι κρυφό — αν δεν φαίνεται, γράψε στο πεδίο ονόματος αρχείου
-   του παραθύρου `.nojekyll` ή απλά προσπέρασέ το, δεν χαλάει τίποτα.)*
-8. Κάτω-κάτω πάτα το πράσινο **Commit changes**.
-9. Πάνω στη σελίδα του repository πάτα **Settings** (γρανάζι) → αριστερά **Pages**.
-10. Στο **Source** διάλεξε **Deploy from a branch**.
-    Στο **Branch** διάλεξε **main** και φάκελο **/ (root)**. Πάτα **Save**.
-11. Περίμενε 1–2 λεπτά και κάνε ανανέωση. Θα εμφανιστεί η διεύθυνση:
+Η εφαρμογή είναι ήδη ζωντανή εδώ:
 
-    **https://nikolaskahris-png.github.io/lista-kopis/**
+**https://nikolaskahris-png.github.io/lista-kopis/**
 
-12. Άνοιξέ την στον υπολογιστή για να δεις ότι δουλεύει.
+Ο κώδικας: https://github.com/nikolaskahris-png/lista-kopis
+
+Δεν χρειάζεται τίποτα άλλο πουθενά. Η ίδια διεύθυνση είναι και η σελίδα στον browser
+και η «εφαρμογή» που μπαίνει στην αρχική οθόνη του κινητού.
 
 ---
 
