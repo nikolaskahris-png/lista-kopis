@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<title>Λίστα Κοπής</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Λίστα Κοπής">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="eikonidio.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="eikonidio-180.png">
+<style>
+  :root{
+    --mavro:#000; --aspro:#fff; --gkri:#f2f2f2; --grammi:#000;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:rgba(0,0,0,.1);}
+  html,body{margin:0; padding:0; background:#fff; color:#000; overflow-x:hidden; max-width:100%;}
+  body{
+    font-family:"Helvetica Neue",Arial,"Segoe UI",sans-serif;
+    font-size:22px; line-height:1.4; font-weight:600;
+    -webkit-text-size-adjust:100%;
+  }
+  .sel{user-select:none;}
+  #efarmogi{max-width:720px; margin:0 auto; padding:14px 14px 40px 14px;}
+
+  h1{font-size:30px; margin:10px 0 18px 0; text-align:center; letter-spacing:.5px;}
+  h2{font-size:26px; margin:18px 0 8px 0;}
+  p{font-size:22px; margin:10px 0;}
+  .mikro{font-size:19px; font-weight:600;}
+
+  /* ---------- κουμπιά ---------- */
+  button{
+    font-family:inherit; font-size:26px; font-weight:700; color:#000; background:#fff;
+    border:3px solid #000; border-radius:14px; min-height:68px; width:100%;
+    padding:12px 14px; margin:0 0 14px 0; display:block; cursor:pointer;
+    text-align:center;
+  }
+  button:active{background:#000; color:#fff;}
+  button.gemato{background:#000; color:#fff;}
+  button.gemato:active{background:#fff; color:#000;}
+  button.megalo{font-size:32px; min-height:110px;}
+  button.mikroKoumpi{font-size:20px; min-height:64px; border-width:2px; margin-bottom:10px;}
+  button.piso{font-size:22px; min-height:64px; border-style:dashed; margin-top:10px;}
+  .duo{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .duo button{margin-bottom:0; min-width:0; font-size:21px; padding:10px 6px;}
+  .treis{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
+  .treis button{margin-bottom:0; font-size:20px; min-height:64px; padding:8px 4px; min-width:0;}
+
+  /* ---------- εικονίδια τύπων ---------- */
+  button.metypo{display:flex; align-items:center; gap:16px; text-align:left; min-height:96px; font-size:28px;}
+  button.metypo svg{flex:0 0 64px; width:64px; height:64px;}
+  button.metypo svg *{stroke:#000; fill:none; stroke-width:5; stroke-linecap:square;}
+  button.metypo:active svg *{stroke:#fff;}
+
+  /* ---------- πεδία αριθμών ---------- */
+  label{display:block; font-size:22px; font-weight:700; margin:16px 0 6px 0;}
+  input[type=text]{
+    font-family:inherit; font-size:30px; font-weight:700; width:100%; padding:14px;
+    border:3px solid #000; border-radius:14px; background:#fff; color:#000; min-height:68px;
+  }
+  .monada{font-size:20px; font-weight:600; margin-top:4px;}
+
+  /* ---------- κουτάκι «αλλαγή» ---------- */
+  .kouti{border:3px solid #000; border-radius:14px; padding:12px 14px; margin:14px 0;}
+  .kouti.kleisto{border-style:dashed;}
+  .seira{display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0;}
+  .seira span{font-size:21px;}
+
+  /* ---------- λίστα κουτιών της δουλειάς ---------- */
+  .grammiKoutiou{border:3px solid #000; border-radius:14px; padding:12px; margin:0 0 16px 0;}
+  .grammiKoutiou .tit{font-size:24px; font-weight:800; margin-bottom:4px;}
+  .grammiKoutiou .ypo{font-size:19px; font-weight:600; margin-bottom:10px;}
+
+  /* ---------- λίστα κοπής ---------- */
+  .yliko{margin:22px 0 6px 0; font-size:25px; font-weight:800; border-bottom:4px solid #000; padding-bottom:6px;}
+  .kommati{display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+           padding:10px 2px; border-bottom:2px dotted #000;}
+  .kommati .met{font-size:27px; font-weight:800; white-space:nowrap; flex:0 0 auto;}
+  .kommati .pou{font-size:17px; font-weight:600; text-align:right; flex:1 1 auto;
+                min-width:0; overflow-wrap:anywhere;}
+
+  table.rthm{width:100%; border-collapse:collapse;}
+  .rthmOmada{font-size:24px; font-weight:800; margin:22px 0 6px; border-bottom:4px solid #000;}
+  .rthmSeira{display:flex; align-items:center; gap:10px; margin:10px 0;}
+  .rthmSeira label{flex:1; margin:0; font-size:20px; font-weight:600;}
+  .rthmSeira input{flex:0 0 120px; min-width:0; font-size:24px; min-height:58px; padding:8px; text-align:right;}
+  .rthmSeira input.keim{flex:0 0 190px; text-align:left; font-size:20px;}
+
+  canvas{width:100%; height:auto; border:3px solid #000; border-radius:8px; background:#fff;}
+
+  .krifo{display:none !important;}
+  .kentro{text-align:center;}
+  .minima{border:3px solid #000; border-radius:14px; padding:12px; margin:14px 0; font-size:21px;}
+
+  /* ---------- εκτύπωση ---------- */
+  @media print{
+    body{font-size:16pt;}
+    #efarmogi{max-width:none; padding:0;}
+    button,.piso,#katoRythmiseis,.minima{display:none !important;}
+    .yliko{page-break-after:avoid;}
+  }
+</style>
+</head>
+<body>
+<div id="efarmogi">
+
+  <!-- ================= ΑΡΧΙΚΗ ================= -->
+  <div class="skini" id="s-arxiki">
+    <h1>ΛΙΣΤΑ ΚΟΠΗΣ</h1>
+    <button class="megalo gemato" onclick="neaDouleia()">ΝΕΑ ΔΟΥΛΕΙΑ</button>
+    <button class="megalo" onclick="pane('s-palies'); deixePalies()">ΠΑΛΙΕΣ ΔΟΥΛΕΙΕΣ</button>
+    <div id="synexeia"></div>
+  </div>
+
+  <!-- ================= ΤΥΠΟΣ ΚΟΥΤΙΟΥ ================= -->
+  <div class="skini krifo" id="s-typos">
+    <h1>ΤΙ ΦΤΙΑΧΝΟΥΜΕ;</h1>
+    <button class="metypo" onclick="dialexeTypo('kato')">
+      <svg viewBox="0 0 100 100"><rect x="10" y="22" width="80" height="60"/><line x1="8" y1="22" x2="92" y2="22"/><line x1="50" y1="30" x2="50" y2="82"/><line x1="18" y1="88" x2="18" y2="96"/><line x1="82" y1="88" x2="82" y2="96"/></svg>
+      Κάτω ντουλάπι
+    </button>
+    <button class="metypo" onclick="dialexeTypo('pano')">
+      <svg viewBox="0 0 100 100"><rect x="10" y="14" width="80" height="56"/><line x1="50" y1="14" x2="50" y2="70"/><line x1="10" y1="86" x2="90" y2="86"/></svg>
+      Πάνω ντουλάπι
+    </button>
+    <button class="metypo" onclick="dialexeTypo('syrtariera')">
+      <svg viewBox="0 0 100 100"><rect x="12" y="14" width="76" height="72"/><line x1="12" y1="32" x2="88" y2="32"/><line x1="12" y1="50" x2="88" y2="50"/><line x1="12" y1="68" x2="88" y2="68"/><line x1="42" y1="23" x2="58" y2="23"/><line x1="42" y1="41" x2="58" y2="41"/><line x1="42" y1="59" x2="58" y2="59"/><line x1="42" y1="77" x2="58" y2="77"/></svg>
+      Συρταριέρα
+    </button>
+    <button class="metypo" onclick="dialexeTypo('ntoulapa')">
+      <svg viewBox="0 0 100 100"><rect x="14" y="8" width="72" height="84"/><line x1="50" y1="8" x2="50" y2="92"/><line x1="20" y1="30" x2="44" y2="30"/><line x1="56" y1="30" x2="80" y2="30"/><line x1="40" y1="46" x2="40" y2="58"/><line x1="60" y1="46" x2="60" y2="58"/></svg>
+      Ντουλάπα ρούχων
+    </button>
+    <button class="metypo" onclick="dialexeTypo('banio')">
+      <svg viewBox="0 0 100 100"><rect x="14" y="20" width="72" height="46"/><line x1="50" y1="20" x2="50" y2="66"/><line x1="36" y1="80" x2="36" y2="92"/><line x1="50" y1="78" x2="50" y2="94"/><line x1="64" y1="80" x2="64" y2="92"/></svg>
+      Μπάνιο
+    </button>
+    <button class="piso" onclick="pisoApoTypo()">◀ ΠΙΣΩ</button>
+  </div>
+
+  <!-- ================= ΠΛΑΤΟΣ (κουζίνα / μπάνιο) ================= -->
+  <div class="skini krifo" id="s-platos">
+    <h1 id="platosTitlos">ΠΛΑΤΟΣ</h1>
+    <p class="kentro mikro" id="platosTypos"></p>
+    <div class="treis" id="platosKoumpia"></div>
+    <button class="mikroKoumpi" style="margin-top:14px" onclick="deixeAlloPlatos()">ΑΛΛΟ ΠΛΑΤΟΣ…</button>
+
+    <div id="alloPlatos" class="kouti krifo">
+      <label for="inPlatos">Πλάτος σε εκατοστά</label>
+      <input type="text" id="inPlatos" inputmode="decimal" autocomplete="off" placeholder="π.χ. 72,5">
+      <button class="gemato" style="margin-top:12px" onclick="apoAlloPlatos()">ΟΚ</button>
+    </div>
+
+    <div class="kouti kleisto">
+      <button class="mikroKoumpi" style="margin:0" onclick="anoixeAllagi()">
+        <span id="allagiEtiketa">αλλαγή (ύψος, βάθος, ράφια, πόρτες)</span>
+      </button>
+      <div id="allagiPanel" class="krifo" style="margin-top:12px"></div>
+    </div>
+
+    <button class="piso" onclick="pane('s-typos')">◀ ΠΙΣΩ</button>
+  </div>
+
+  <!-- ================= ΝΤΟΥΛΑΠΑ ΡΟΥΧΩΝ ================= -->
+  <div class="skini krifo" id="s-ntoulapa">
+    <h1>ΝΤΟΥΛΑΠΑ ΡΟΥΧΩΝ</h1>
+    <label for="ntPlatos">Συνολικό πλάτος (εκ.)</label>
+    <input type="text" id="ntPlatos" inputmode="decimal" autocomplete="off" placeholder="π.χ. 240">
+    <label for="ntTavani">Ύψος ταβανιού (εκ.)</label>
+    <input type="text" id="ntTavani" inputmode="decimal" autocomplete="off" placeholder="π.χ. 265">
+    <div id="ntPlirofories" class="minima krifo"></div>
+    <h2>Τι πόρτες;</h2>
+    <button class="gemato" onclick="apoNtoulapa('anoigomenes')">ΑΝΟΙΓΟΜΕΝΕΣ</button>
+    <button onclick="apoNtoulapa('syromenes')">ΣΥΡΟΜΕΝΕΣ</button>
+    <button class="piso" onclick="pane('s-typos')">◀ ΠΙΣΩ</button>
+  </div>
+
+  <!-- ================= ΛΙΣΤΑ ΚΟΥΤΙΩΝ ΤΗΣ ΔΟΥΛΕΙΑΣ ================= -->
+  <div class="skini krifo" id="s-douleia">
+    <h1 id="douleiaTitlos">Η ΔΟΥΛΕΙΑ</h1>
+    <div id="douleiaKoutia"></div>
+    <button onclick="pane('s-typos')">+ ΑΛΛΟ ΚΟΥΤΙ</button>
+    <button class="megalo gemato" id="koumpiListas" onclick="pane('s-kopi'); deixeKopi()">ΛΙΣΤΑ ΚΟΠΗΣ</button>
+    <button class="piso" onclick="pane('s-arxiki')">◀ ΑΡΧΙΚΗ</button>
+  </div>
+
+  <!-- ================= ΑΛΛΑΓΗ ΚΟΥΤΙΟΥ ================= -->
+  <div class="skini krifo" id="s-allagi">
+    <h1>ΑΛΛΑΓΗ</h1>
+    <p class="kentro mikro" id="allagiTitlos"></p>
+    <div id="allagiPedia"></div>
+    <button class="gemato" onclick="sozeAllagi()">ΑΠΟΘΗΚΕΥΣΗ</button>
+    <button class="piso" onclick="pane('s-douleia'); deixeDouleia()">◀ ΑΚΥΡΟ</button>
+  </div>
+
+  <!-- ================= ΣΙΓΟΥΡΑ; ================= -->
+  <div class="skini krifo" id="s-sbisimo">
+    <h1>ΣΙΓΟΥΡΑ;</h1>
+    <p class="kentro" id="sbisimoTitlos"></p>
+    <button class="gemato" onclick="sbiseTora()">ΝΑΙ, ΣΒΗΣΕ ΤΟ</button>
+    <button onclick="pane('s-douleia'); deixeDouleia()">ΟΧΙ</button>
+  </div>
+
+  <!-- ================= ΛΙΣΤΑ ΚΟΠΗΣ ================= -->
+  <div class="skini krifo" id="s-kopi">
+    <h1>ΛΙΣΤΑ ΚΟΠΗΣ</h1>
+    <div id="kopiPerilipsi" class="mikro"></div>
+    <div id="kopiLista"></div>
+    <div id="kopiKoumpia" style="margin-top:26px">
+      <button class="gemato" onclick="pane('s-sxedio'); deixeSxedio()">ΣΧΕΔΙΟ</button>
+      <button onclick="steile('viber')">ΣΤΕΙΛΕ ΣΤΟ VIBER</button>
+      <button onclick="steile('whatsapp')">ΣΤΕΙΛΕ ΣΤΟ WHATSAPP</button>
+      <button id="koumpiMoirasma" class="krifo" onclick="moirasmaMeEikona()">ΣΤΕΙΛΕ ΛΙΣΤΑ ΚΑΙ ΣΧΕΔΙΟ</button>
+      <button onclick="window.print()">ΕΚΤΥΠΩΣΗ</button>
+      <button onclick="pane('s-onoma'); etoimaseOnoma()">ΤΕΛΕΙΩΣΑ</button>
+    </div>
+    <button class="piso" onclick="pane('s-douleia'); deixeDouleia()">◀ ΠΙΣΩ</button>
+  </div>
+
+  <!-- ================= ΣΧΕΔΙΟ ================= -->
+  <div class="skini krifo" id="s-sxedio">
+    <h1>ΣΧΕΔΙΟ</h1>
+    <canvas id="kanvas"></canvas>
+    <div style="margin-top:20px">
+      <button class="gemato" onclick="sozeEikona()">ΑΠΟΘΗΚΕΥΣΗ ΕΙΚΟΝΑΣ</button>
+      <button id="koumpiMoirasma2" class="krifo" onclick="moirasmaMeEikona()">ΣΤΕΙΛΕ ΛΙΣΤΑ ΚΑΙ ΣΧΕΔΙΟ</button>
+    </div>
+    <div id="sxedioMinima" class="minima krifo"></div>
+    <button class="piso" onclick="pane('s-kopi'); deixeKopi()">◀ ΠΙΣΩ</button>
+  </div>
+
+  <!-- ================= ΟΝΟΜΑ ΔΟΥΛΕΙΑΣ ================= -->
+  <div class="skini krifo" id="s-onoma">
+    <h1>ΟΝΟΜΑ ΔΟΥΛΕΙΑΣ</h1>
+    <p class="kentro mikro">Αν θέλεις, γράψε πού είναι η δουλειά.<br>Μπορείς και να το αφήσεις κενό.</p>
+    <label for="inOnoma">Όνομα</label>
+    <input type="text" id="inOnoma" autocomplete="off" placeholder="π.χ. Ακρίτας 103">
+    <button class="gemato" style="margin-top:14px" onclick="sozeOnoma()">ΑΠΟΘΗΚΕΥΣΗ</button>
+    <button onclick="sozeOnoma(true)">ΧΩΡΙΣ ΟΝΟΜΑ</button>
+    <button class="piso" onclick="pane('s-kopi'); deixeKopi()">◀ ΠΙΣΩ</button>
+  </div>
+
+  <!-- ================= ΠΑΛΙΕΣ ΔΟΥΛΕΙΕΣ ================= -->
+  <div class="skini krifo" id="s-palies">
+    <h1>ΠΑΛΙΕΣ ΔΟΥΛΕΙΕΣ</h1>
+    <div id="paliesLista"></div>
+    <button class="piso" onclick="pane('s-arxiki')">◀ ΑΡΧΙΚΗ</button>
+  </div>
+
+  <!-- ================= ΡΥΘΜΙΣΕΙΣ ================= -->
+  <div class="skini krifo" id="s-rythmiseis">
+    <h1>ΡΥΘΜΙΣΕΙΣ</h1>
+    <p class="mikro">Αυτά είναι τα σταθερά μέτρα. Άλλαξέ τα μόνο αν ξέρεις τι κάνεις.</p>
+    <div id="rythmPedia"></div>
+    <button class="gemato" style="margin-top:20px" onclick="sozeRythmiseis()">ΑΠΟΘΗΚΕΥΣΗ</button>
+    <button onclick="epanaforaRythmiseon()">ΕΠΑΝΑΦΟΡΑ</button>
+    <button class="piso" onclick="pane(prinApoRythmiseis)">◀ ΠΙΣΩ</button>
+  </div>
+
+  <!-- ================= κάτω κουμπί ρυθμίσεων ================= -->
+  <div id="katoRythmiseis" style="margin-top:40px; border-top:3px solid #000; padding-top:18px">
+    <button class="mikroKoumpi" onclick="anoixeRythmiseis()">ΡΥΘΜΙΣΕΙΣ</button>
+  </div>
+</div>
+
+<script src="kanones.js"></script>
+<script>
+'use strict';
+var K = window.KANONES;
+
+/* ================== ΑΠΟΘΗΚΗ ΣΤΟ ΚΙΝΗΤΟ ================== */
+var KLEIDI_D = 'ksyl_douleies_v1', KLEIDI_R = 'ksyl_rythmiseis_v1';
+
+function fortose(kleidi, proepilogi) {
+  try {
+    var t = localStorage.getItem(kleidi);
+    return t ? JSON.parse(t) : proepilogi;
+  } catch (e) { return proepilogi; }
+}
+function grapse(kleidi, timi) {
+  try { localStorage.setItem(kleidi, JSON.stringify(timi)); } catch (e) {}
+}
+
+var R = fortose(KLEIDI_R, {});          // ρυθμίσεις του χρήστη
+var douleies = fortose(KLEIDI_D, []);   // όλες οι δουλειές
+var douleia = null;                     // η τρέχουσα δουλειά
+var trexonTypos = null;                 // ο τύπος που διάλεξε τώρα
+var prosorinaMetra = null;              // τα μέτρα από το κουτάκι «αλλαγή»
+var allagiIndex = -1, sbisimoIndex = -1;
+var prinApoRythmiseis = 's-arxiki';
+
+function S() { return K.rythmiseis(R); }
+
+/* ================== ΟΘΟΝΕΣ ================== */
+function pane(id) {
+  var o = document.querySelectorAll('.skini'), i;
+  for (i = 0; i < o.length; i++) o[i].classList.add('krifo');
+  document.getElementById(id).classList.remove('krifo');
+  document.getElementById('katoRythmiseis').style.display = (id === 's-rythmiseis') ? 'none' : '';
+  window.scrollTo(0, 0);
+}
+
+function imerominiaSimera() {
+  var d = new Date();
+  function dd(n) { return (n < 10 ? '0' : '') + n; }
+  return dd(d.getDate()) + '/' + dd(d.getMonth() + 1) + '/' + d.getFullYear();
+}
+
+/* ================== ΔΟΥΛΕΙΕΣ ================== */
+function neaDouleia() {
+  douleia = { id: 'd' + Date.now(), imerominia: imerominiaSimera(), onoma: '', koutia: [] };
+  douleies.unshift(douleia);
+  sose();
+  pane('s-typos');
+}
+
+function sose() {
+  if (!douleia) return;
+  var i, vrethike = false;
+  for (i = 0; i < douleies.length; i++) {
+    if (douleies[i].id === douleia.id) { douleies[i] = douleia; vrethike = true; break; }
+  }
+  if (!vrethike) douleies.unshift(douleia);
+  // κρατάμε μόνο δουλειές που έχουν κουτιά
+  douleies = douleies.filter(function (d) { return d.koutia && d.koutia.length > 0; });
+  grapse(KLEIDI_D, douleies);
+}
+
+function pisoApoTypo() {
+  if (douleia && douleia.koutia.length > 0) { pane('s-douleia'); deixeDouleia(); }
+  else pane('s-arxiki');
+}
+
+/* ================== ΤΥΠΟΣ -> ΠΛΑΤΟΣ ================== */
+var PLATI_KOUMPIA = [40, 45, 50, 60, 80, 90];
+
+function dialexeTypo(typos) {
+  trexonTypos = typos;
+  prosorinaMetra = null;
+  if (typos === 'ntoulapa') {
+    document.getElementById('ntPlatos').value = '';
+    document.getElementById('ntTavani').value = '';
+    document.getElementById('ntPlirofories').classList.add('krifo');
+    pane('s-ntoulapa');
+    return;
+  }
+  document.getElementById('platosTypos').textContent = K.TYPOI[typos].onoma;
+  var g = document.getElementById('platosKoumpia');
+  g.innerHTML = '';
+  PLATI_KOUMPIA.forEach(function (p) {
+    var b = document.createElement('button');
+    b.textContent = p;
+    b.onclick = function () { prostheseKouti(typos, p); };
+    g.appendChild(b);
+  });
+  document.getElementById('alloPlatos').classList.add('krifo');
+  document.getElementById('inPlatos').value = '';
+  document.getElementById('allagiPanel').classList.add('krifo');
+  document.getElementById('allagiEtiketa').textContent = 'αλλαγή (ύψος, βάθος, ράφια, πόρτες)';
+  pane('s-platos');
+}
+
+function deixeAlloPlatos() {
+  document.getElementById('alloPlatos').classList.remove('krifo');
+  document.getElementById('inPlatos').focus();
+}
+
+function apoAlloPlatos() {
+  var p = K.arithmos(document.getElementById('inPlatos').value);
+  if (!(p > 0)) { alert('Γράψε πλάτος σε εκατοστά.'); return; }
+  prostheseKouti(trexonTypos, p);
+}
+
+/* ---- το κουτάκι «αλλαγή» πριν μπει το κουτί ---- */
+function anoixeAllagi() {
+  var p = document.getElementById('allagiPanel');
+  if (!p.classList.contains('krifo')) { p.classList.add('krifo'); return; }
+  var s = S(), m;
+  if (!prosorinaMetra) {
+    m = K.neoKouti(trexonTypos, 60, R);
+    prosorinaMetra = { ypsos: m.ypsos, bathos: m.bathos, rafia: m.rafia, portes: m.portes, syrtaria: m.syrtaria };
+  }
+  var h = '';
+  h += pedio('pm_ypsos', 'Ύψος κουτιού (εκ.)', prosorinaMetra.ypsos);
+  h += pedio('pm_bathos', 'Βάθος (εκ.)', prosorinaMetra.bathos);
+  if (trexonTypos === 'syrtariera') {
+    h += pedio('pm_syrtaria', 'Πόσα συρτάρια', prosorinaMetra.syrtaria);
+  } else {
+    h += pedio('pm_rafia', 'Πόσα ράφια', prosorinaMetra.rafia);
+    h += pedio('pm_portes', 'Πόσες πόρτες (0 = αυτόματα)', prosorinaMetra.portes);
+  }
+  h += '<p class="mikro">Αν τα αφήσεις όπως είναι, βγαίνουν μόνα τους από τους κανόνες.</p>';
+  p.innerHTML = h;
+  p.classList.remove('krifo');
+  document.getElementById('allagiEtiketa').textContent = 'κλείσε την αλλαγή';
+}
+
+function pedio(id, etiketa, timi) {
+  return '<label for="' + id + '">' + etiketa + '</label>' +
+    '<input type="text" id="' + id + '" inputmode="decimal" autocomplete="off" value="' + K.nou(timi) + '">';
+}
+function diavase(id, proepilogi) {
+  var e = document.getElementById(id);
+  if (!e) return proepilogi;
+  var v = K.arithmos(e.value);
+  return isNaN(v) ? proepilogi : v;
+}
+
+function prostheseKouti(typos, platos) {
+  var k = K.neoKouti(typos, platos, R);
+  var p = document.getElementById('allagiPanel');
+  if (p && !p.classList.contains('krifo')) {
+    k.ypsos  = diavase('pm_ypsos', k.ypsos);
+    k.bathos = diavase('pm_bathos', k.bathos);
+    if (typos === 'syrtariera') k.syrtaria = Math.max(1, Math.round(diavase('pm_syrtaria', k.syrtaria)));
+    else {
+      k.rafia  = Math.max(0, Math.round(diavase('pm_rafia', k.rafia)));
+      var pr = Math.max(0, Math.round(diavase('pm_portes', k.portes)));
+      k.portes = pr > 0 ? pr : K.arithmosPorton(platos, S());
+    }
+  }
+  douleia.koutia.push(k);
+  sose();
+  pane('s-douleia');
+  deixeDouleia();
+}
+
+/* ================== ΝΤΟΥΛΑΠΑ ================== */
+document.getElementById('ntPlatos').addEventListener('input', deixeNtPlirofories);
+document.getElementById('ntTavani').addEventListener('input', deixeNtPlirofories);
+
+function deixeNtPlirofories() {
+  var w = K.arithmos(document.getElementById('ntPlatos').value);
+  var t = K.arithmos(document.getElementById('ntTavani').value);
+  var d = document.getElementById('ntPlirofories');
+  if (!(w > 0)) { d.classList.add('krifo'); return; }
+  var s = S(), tm = K.tmimata(w, s);
+  var txt = 'Χωρίζεται σε <b>' + tm.n + '</b> ' + (tm.n === 1 ? 'τμήμα' : 'τμήματα') +
+    ' των ' + K.nou(tm.esoterikoTmimatos) + ' εκ. (μέσα).';
+  if (t > 0) txt += '<br>Ύψος κουτιού: <b>' + K.nou(K.ypsosNtoulapas(t, s)) + '</b> εκ.';
+  d.innerHTML = txt;
+  d.classList.remove('krifo');
+}
+
+function apoNtoulapa(eidos) {
+  var w = K.arithmos(document.getElementById('ntPlatos').value);
+  var t = K.arithmos(document.getElementById('ntTavani').value);
+  if (!(w > 0)) { alert('Γράψε το συνολικό πλάτος.'); return; }
+  if (!(t > 0)) { alert('Γράψε το ύψος του ταβανιού.'); return; }
+  var k = K.neoKouti('ntoulapa', w, R, { ypsosTavaniou: t, eidosPortas: eidos });
+  douleia.koutia.push(k);
+  sose();
+  pane('s-douleia');
+  deixeDouleia();
+}
+
+/* ================== ΛΙΣΤΑ ΚΟΥΤΙΩΝ ================== */
+function deixeDouleia() {
+  document.getElementById('douleiaTitlos').textContent =
+    douleia.onoma ? K.kefalaia(douleia.onoma) : 'Η ΔΟΥΛΕΙΑ ' + douleia.imerominia;
+  var d = document.getElementById('douleiaKoutia');
+  d.innerHTML = '';
+  if (douleia.koutia.length === 0) {
+    d.innerHTML = '<p class="kentro">Δεν έχεις βάλει κουτιά ακόμα.</p>';
+    document.getElementById('koumpiListas').classList.add('krifo');
+    return;
+  }
+  document.getElementById('koumpiListas').classList.remove('krifo');
+  douleia.koutia.forEach(function (k, i) {
+    var div = document.createElement('div');
+    div.className = 'grammiKoutiou';
+    var ypo = 'ύψος ' + K.nou(k.ypsos) + ' · βάθος ' + K.nou(k.bathos);
+    if (k.typos === 'syrtariera') ypo += ' · ' + k.syrtaria + ' συρτάρια';
+    else if (k.typos === 'ntoulapa') ypo += ' · ταβάνι ' + K.nou(k.ypsosTavaniou);
+    else ypo += ' · ' + k.rafia + (k.rafia === 1 ? ' ράφι' : ' ράφια') + ' · ' + k.portes + (k.portes === 1 ? ' πόρτα' : ' πόρτες');
+    div.innerHTML = '<div class="tit">' + (i + 1) + '. ' + K.titlos(k, R) + '</div><div class="ypo">' + ypo + '</div>';
+    var g = document.createElement('div');
+    g.className = 'treis';
+    g.appendChild(koumpi('ΙΔΙΟ ΞΑΝΑ', function () { idioXana(i); }));
+    g.appendChild(koumpi('ΑΛΛΑΓΗ', function () { anoixeAllagiKoutiou(i); }));
+    g.appendChild(koumpi('ΣΒΗΣΙΜΟ', function () { rotaSbisimo(i); }));
+    div.appendChild(g);
+    d.appendChild(div);
+  });
+}
+
+function koumpi(keim, f) {
+  var b = document.createElement('button');
+  b.textContent = keim; b.onclick = f;
+  return b;
+}
+
+function idioXana(i) {
+  var k = JSON.parse(JSON.stringify(douleia.koutia[i]));
+  douleia.koutia.push(k);
+  sose();
+  deixeDouleia();
+}
+
+function rotaSbisimo(i) {
+  sbisimoIndex = i;
+  document.getElementById('sbisimoTitlos').textContent = 'Να σβήσω το «' + K.titlos(douleia.koutia[i], R) + '»;';
+  pane('s-sbisimo');
+}
+function sbiseTora() {
+  douleia.koutia.splice(sbisimoIndex, 1);
+  sose();
+  pane('s-douleia');
+  deixeDouleia();
+}
+
+/* ================== ΑΛΛΑΓΗ ΥΠΑΡΧΟΝΤΟΣ ΚΟΥΤΙΟΥ ================== */
+function anoixeAllagiKoutiou(i) {
+  allagiIndex = i;
+  var k = douleia.koutia[i];
+  document.getElementById('allagiTitlos').textContent = K.titlos(k, R);
+  var h = '';
+  if (k.typos === 'ntoulapa') {
+    h += pedio('al_platos', 'Συνολικό πλάτος (εκ.)', k.platos);
+    h += pedio('al_tavani', 'Ύψος ταβανιού (εκ.)', k.ypsosTavaniou);
+    h += pedio('al_bathos', 'Βάθος (εκ.)', k.bathos);
+    h += pedio('al_rafia', 'Ράφια σε κάθε τμήμα', k.rafia);
+    h += pedio('al_portes', 'Πόσες πόρτες (0 = αυτόματα)', k.portes);
+    h += '<label>Είδος πόρτας</label>';
+    h += '<div class="duo"><button id="al_anoig" onclick="dialexeEidos(\'anoigomenes\')">ΑΝΟΙΓΟΜΕΝΕΣ</button>' +
+         '<button id="al_syrom" onclick="dialexeEidos(\'syromenes\')">ΣΥΡΟΜΕΝΕΣ</button></div>';
+  } else {
+    h += pedio('al_platos', 'Πλάτος (εκ.)', k.platos);
+    h += pedio('al_ypsos', 'Ύψος κουτιού (εκ.)', k.ypsos);
+    h += pedio('al_bathos', 'Βάθος (εκ.)', k.bathos);
+    if (k.typos === 'syrtariera') h += pedio('al_syrtaria', 'Πόσα συρτάρια', k.syrtaria);
+    else {
+      h += pedio('al_rafia', 'Πόσα ράφια', k.rafia);
+      h += pedio('al_portes', 'Πόσες πόρτες (0 = αυτόματα)', k.portes);
+    }
+  }
+  document.getElementById('allagiPedia').innerHTML = h;
+  if (k.typos === 'ntoulapa') dialexeEidos(k.eidosPortas);
+  pane('s-allagi');
+}
+
+var epilegmenoEidos = 'anoigomenes';
+function dialexeEidos(e) {
+  epilegmenoEidos = e;
+  var a = document.getElementById('al_anoig'), s = document.getElementById('al_syrom');
+  if (!a || !s) return;
+  a.className = (e === 'anoigomenes') ? 'gemato' : '';
+  s.className = (e === 'syromenes') ? 'gemato' : '';
+}
+
+function sozeAllagi() {
+  var k = douleia.koutia[allagiIndex];
+  k.platos = K.r1(diavase('al_platos', k.platos));
+  k.bathos = K.r1(diavase('al_bathos', k.bathos));
+  if (k.typos === 'ntoulapa') {
+    k.ypsosTavaniou = K.r1(diavase('al_tavani', k.ypsosTavaniou));
+    K.ananeosiNtoulapas(k, R);
+    k.rafia  = Math.max(0, Math.round(diavase('al_rafia', k.rafia)));
+    k.portes = Math.max(0, Math.round(diavase('al_portes', k.portes)));
+    k.eidosPortas = epilegmenoEidos;
+  } else {
+    k.ypsos = K.r1(diavase('al_ypsos', k.ypsos));
+    if (k.typos === 'syrtariera') k.syrtaria = Math.max(1, Math.round(diavase('al_syrtaria', k.syrtaria)));
+    else {
+      k.rafia  = Math.max(0, Math.round(diavase('al_rafia', k.rafia)));
+      var p = Math.max(0, Math.round(diavase('al_portes', k.portes)));
+      k.portes = p > 0 ? p : K.arithmosPorton(k.platos, S());
+    }
+  }
+  sose();
+  pane('s-douleia');
+  deixeDouleia();
+}
+
+/* ================== ΛΙΣΤΑ ΚΟΠΗΣ ================== */
+function deixeKopi() {
+  var l = K.listaKopis(douleia.koutia, R);
+  var p = document.getElementById('kopiPerilipsi');
+  p.innerHTML = (douleia.onoma ? '<b>' + xml(douleia.onoma) + '</b> · ' : '') + douleia.imerominia +
+    '<br>' + douleia.koutia.map(function (k) { return xml(K.titlos(k, R)); }).join('<br>');
+  var d = document.getElementById('kopiLista');
+  d.innerHTML = '';
+  l.forEach(function (g) {
+    var h = document.createElement('div');
+    h.className = 'yliko';
+    h.textContent = K.kefalaia(g.yliko);
+    d.appendChild(h);
+    g.kommatia.forEach(function (x) {
+      var r = document.createElement('div');
+      r.className = 'kommati';
+      r.innerHTML = '<span class="met">' + K.grammi(x) + '</span><span class="pou">' + xml(x.onomata.join(', ')) + '</span>';
+      d.appendChild(r);
+    });
+  });
+  var sim = document.createElement('p');
+  sim.className = 'mikro';
+  sim.style.marginTop = '20px';
+  sim.textContent = 'Όλα σε εκατοστά. Πρώτα το ύψος (κατά τα νερά).';
+  d.appendChild(sim);
+  if (navigator.canShare) {
+    document.getElementById('koumpiMoirasma').classList.remove('krifo');
+    document.getElementById('koumpiMoirasma2').classList.remove('krifo');
+  }
+}
+
+function xml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* ================== ΣΤΕΙΛΕ ================== */
+function steile(pou) {
+  var t = K.keimeno(douleia, R);
+  var u = encodeURIComponent(t);
+  if (pou === 'viber') window.location.href = 'viber://forward?text=' + u;
+  else window.location.href = 'https://wa.me/?text=' + u;
+}
+
+function moirasmaMeEikona() {
+  var kanvas = document.getElementById('kanvas');
+  if (!kanvas.width) { zografise(); }
+  var t = K.keimeno(douleia, R);
+  if (!kanvas.toBlob || !navigator.canShare) { steile('whatsapp'); return; }
+  kanvas.toBlob(function (blob) {
+    var f = new File([blob], 'sxedio.png', { type: 'image/png' });
+    if (navigator.canShare({ files: [f] })) {
+      navigator.share({ title: 'Λίστα κοπής', text: t, files: [f] }).catch(function () {});
+    } else {
+      navigator.share({ title: 'Λίστα κοπής', text: t }).catch(function () {});
+    }
+  }, 'image/png');
+}
+
+/* ================== ΣΧΕΔΙΟ ================== */
+function deixeSxedio() { zografise(); }
+
+function sozeEikona() {
+  var kanvas = document.getElementById('kanvas');
+  var m = document.getElementById('sxedioMinima');
+  try {
+    kanvas.toBlob(function (blob) {
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'sxedio-' + (douleia.onoma ? douleia.onoma.replace(/[^0-9A-Za-zΑ-Ωα-ω]+/g, '_') : douleia.imerominia.replace(/\//g, '-')) + '.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      m.textContent = 'Η εικόνα αποθηκεύτηκε. Αν δεν τη βρεις, κράτα το δάχτυλο πάνω στην εικόνα και διάλεξε «Αποθήκευση».';
+      m.classList.remove('krifo');
+    }, 'image/png');
+  } catch (e) {
+    m.textContent = 'Κράτα το δάχτυλο πάνω στην εικόνα και διάλεξε «Αποθήκευση εικόνας».';
+    m.classList.remove('krifo');
+  }
+}
+
+function zografise() {
+  var s = S();
+  var kato = [], pano = [], nt = [], ban = [];
+  douleia.koutia.forEach(function (k) {
+    if (k.typos === 'kato' || k.typos === 'syrtariera') kato.push(k);
+    else if (k.typos === 'pano') pano.push(k);
+    else if (k.typos === 'ntoulapa') nt.push(k);
+    else if (k.typos === 'banio') ban.push(k);
+  });
+  function synolo(a) { var v = 0; a.forEach(function (k) { v += k.platos; }); return v; }
+
+  var zones = [];
+  if (kato.length || pano.length) {
+    var ypsosKouz = Math.max(
+      s.KATO_PODIA + (kato.length ? Math.max.apply(null, kato.map(function (k) { return k.ypsos; })) : 0) + s.KATO_PAGKOS,
+      pano.length ? s.PANO_KREMASMA + Math.max.apply(null, pano.map(function (k) { return k.ypsos; })) : 0
+    ) + 10;
+    zones.push({ titlos: 'ΚΟΥΖΙΝΑ', eidos: 'kouzina', kato: kato, pano: pano,
+                 cmW: Math.max(synolo(kato), synolo(pano)), cmH: ypsosKouz });
+  }
+  nt.forEach(function (k) {
+    zones.push({ titlos: 'ΝΤΟΥΛΑΠΑ ΡΟΥΧΩΝ', eidos: 'nt', k: k,
+                 cmW: k.platos, cmH: (k.ypsosTavaniou || (k.ypsos + 13)) + 6 });
+  });
+  if (ban.length) {
+    zones.push({ titlos: 'ΜΠΑΝΙΟ', eidos: 'banio', list: ban,
+                 cmW: synolo(ban), cmH: Math.max.apply(null, ban.map(function (k) { return k.ypsos; })) + 20 });
+  }
+
+  var kanvas = document.getElementById('kanvas');
+  if (!zones.length) {
+    kanvas.width = 800; kanvas.height = 200;
+    var c0 = kanvas.getContext('2d');
+    c0.fillStyle = '#fff'; c0.fillRect(0, 0, 800, 200);
+    c0.fillStyle = '#000'; c0.font = 'bold 30px Arial'; c0.textAlign = 'center';
+    c0.fillText('Δεν υπάρχει τίποτα για σχέδιο.', 400, 110);
+    return;
+  }
+
+  var PAD = 50, PLATOS = 1400;
+  var maxCmW = Math.max.apply(null, zones.map(function (z) { return z.cmW; }));
+  var ppc = (PLATOS - 2 * PAD) / maxCmW;
+  if (ppc > 7) ppc = 7;
+  if (ppc < 1.2) ppc = 1.2;
+
+  var TITLOS_Y = 54;                // χώρος για τον τίτλο της ζώνης
+  var synolikoYpsos = PAD;
+  zones.forEach(function (z) {
+    // χώρος από κάτω για τις γραμμές διαστάσεων
+    z.katoY = 86;
+    if (z.eidos === 'kouzina' && z.kato.length && z.pano.length) z.katoY = 122;
+    if (z.eidos === 'nt' || z.eidos === 'banio') z.katoY = 110;
+    z.pxH = z.cmH * ppc;
+    z.y = synolikoYpsos + TITLOS_Y;
+    synolikoYpsos += TITLOS_Y + z.pxH + z.katoY;
+  });
+  synolikoYpsos += PAD;
+
+  kanvas.width = Math.round(PAD * 2 + maxCmW * ppc);
+  kanvas.height = Math.round(synolikoYpsos);
+  var c = kanvas.getContext('2d');
+  c.fillStyle = '#fff'; c.fillRect(0, 0, kanvas.width, kanvas.height);
+  c.strokeStyle = '#000'; c.fillStyle = '#000';
+  c.lineJoin = 'miter'; c.textBaseline = 'middle';
+
+  function rect(x, y, w, h, pahos) {
+    c.lineWidth = pahos || 3;
+    c.strokeRect(Math.round(x) + .5, Math.round(y) + .5, Math.round(w), Math.round(h));
+  }
+  function grammi(x1, y1, x2, y2, pahos) {
+    c.lineWidth = pahos || 2;
+    c.beginPath(); c.moveTo(Math.round(x1) + .5, Math.round(y1) + .5);
+    c.lineTo(Math.round(x2) + .5, Math.round(y2) + .5); c.stroke();
+  }
+  function keim(t, x, y, megethos, stoixisi, entona) {
+    c.font = (entona === false ? '' : 'bold ') + megethos + 'px Arial';
+    c.textAlign = stoixisi || 'center';
+    c.fillText(t, x, y);
+  }
+  // διάσταση με βελάκια
+  function diastasi(x1, x2, y, t) {
+    grammi(x1, y, x2, y, 2);
+    grammi(x1, y - 8, x1, y + 8, 2);
+    grammi(x2, y - 8, x2, y + 8, 2);
+    c.fillStyle = '#fff';
+    var w = t.length * 13 + 16;
+    c.fillRect((x1 + x2) / 2 - w / 2, y - 14, w, 28);
+    c.fillStyle = '#000';
+    keim(t, (x1 + x2) / 2, y, 24);
+  }
+  // πόρτες μέσα σε ένα φάτσα
+  function portes(x, y, w, h, n) {
+    var kena = 4, pw = (w - kena * (n - 1)) / n, i, px;
+    for (i = 0; i < n; i++) {
+      px = x + i * (pw + kena);
+      rect(px, y, pw, h, 2);
+      // πόμολο
+      var hx = (n === 1 || i === n - 1) ? px + pw - 10 : px + 10;
+      grammi(hx, y + h / 2 - 12, hx, y + h / 2 + 12, 4);
+    }
+  }
+  function syrtaria(x, y, w, h, n) {
+    var kena = 4, sh = (h - kena * (n - 1)) / n, i, sy;
+    for (i = 0; i < n; i++) {
+      sy = y + i * (sh + kena);
+      rect(x, sy, w, sh, 2);
+      grammi(x + w / 2 - 16, sy + sh / 2, x + w / 2 + 16, sy + sh / 2, 4);
+    }
+  }
+  function etiketa(k, x, y, w, h) {
+    var t1 = K.nou(k.platos) + ' × ' + K.nou(k.ypsos);
+    var t2 = 'βάθος ' + K.nou(k.bathos);
+    var fs = 24;
+    if (w < 120) fs = 18;
+    c.font = 'bold ' + fs + 'px Arial';
+    var wt = Math.max(c.measureText(t1).width, c.measureText(t2).width) + 14;
+    var cx = x + w / 2, cy = y + h / 2;
+    c.fillStyle = '#fff'; c.fillRect(cx - wt / 2, cy - fs - 4, wt, fs * 2 + 10);
+    c.fillStyle = '#000';
+    keim(t1, cx, cy - fs / 2 - 1, fs);
+    keim(t2, cx, cy + fs / 2 + 3, fs - 4, 'center');
+  }
+
+  zones.forEach(function (z) {
+    var x0 = PAD, katoY = z.y + z.pxH;   // το πάτωμα της ζώνης
+    keim(z.titlos, PAD, z.y - 26, 30, 'left');
+
+    if (z.eidos === 'kouzina') {
+      // ---- κάτω σειρά ----
+      var x = x0;
+      z.kato.forEach(function (k) {
+        var w = k.platos * ppc, h = k.ypsos * ppc;
+        var yTop = katoY - (s.KATO_PODIA + k.ypsos) * ppc;
+        rect(x, yTop, w, h, 4);
+        // πόδια
+        grammi(x + 6, katoY - s.KATO_PODIA * ppc, x + 6, katoY, 3);
+        grammi(x + w - 6, katoY - s.KATO_PODIA * ppc, x + w - 6, katoY, 3);
+        if (k.typos === 'syrtariera') syrtaria(x + 4, yTop + 4, w - 8, h - 8, k.syrtaria);
+        else if (k.portes > 0) portes(x + 4, yTop + 4, w - 8, h - 8, k.portes);
+        etiketa(k, x, yTop, w, h);
+        x += w;
+      });
+      // πάγκος
+      if (z.kato.length) {
+        var wKato = 0;
+        z.kato.forEach(function (k) { wKato += k.platos; });
+        var ypsMax = Math.max.apply(null, z.kato.map(function (k) { return k.ypsos; }));
+        var pagkosY = katoY - (s.KATO_PODIA + ypsMax + s.KATO_PAGKOS) * ppc;
+        rect(x0 - 3, pagkosY, wKato * ppc + 6, s.KATO_PAGKOS * ppc, 4);
+      }
+      // πάτωμα
+      grammi(x0 - 20, katoY, x0 + z.cmW * ppc + 20, katoY, 5);
+
+      // ---- πάνω σειρά ----
+      var xp = x0;
+      z.pano.forEach(function (k) {
+        var w = k.platos * ppc, h = k.ypsos * ppc;
+        var yTop = katoY - (s.PANO_KREMASMA + k.ypsos) * ppc;
+        rect(xp, yTop, w, h, 4);
+        if (k.portes > 0) portes(xp + 4, yTop + 4, w - 8, h - 8, k.portes);
+        etiketa(k, xp, yTop, w, h);
+        xp += w;
+      });
+
+      // σύνολα
+      var yD = katoY + 40;
+      if (z.kato.length) {
+        var wk = 0; z.kato.forEach(function (k) { wk += k.platos; });
+        diastasi(x0, x0 + wk * ppc, yD, 'κάτω σύνολο ' + K.nou(wk) + ' εκ.');
+      }
+      if (z.pano.length) {
+        var wp = 0; z.pano.forEach(function (k) { wp += k.platos; });
+        diastasi(x0, x0 + wp * ppc, yD + (z.kato.length ? 36 : 0), 'πάνω σύνολο ' + K.nou(wp) + ' εκ.');
+      }
+    }
+
+    else if (z.eidos === 'nt') {
+      var k = z.k, w = k.platos * ppc, h = k.ypsos * ppc;
+      var yTop = katoY - (s.NT_PODIA + k.ypsos) * ppc;
+      rect(x0, yTop, w, h, 4);
+      grammi(x0 + 6, katoY - s.NT_PODIA * ppc, x0 + 6, katoY, 3);
+      grammi(x0 + w - 6, katoY - s.NT_PODIA * ppc, x0 + w - 6, katoY, 3);
+      grammi(x0 - 20, katoY, x0 + w + 20, katoY, 5);
+      // χωρίσματα
+      var tm = K.tmimata(k.platos, s), i;
+      for (i = 1; i < tm.n; i++) {
+        var xx = x0 + (w / tm.n) * i;
+        grammi(xx, yTop, xx, yTop + h, 4);
+      }
+      // πόρτες
+      var komm = K.kommatia(k, R);
+      var pk = null;
+      komm.forEach(function (x) { if (x.omada === 'porta') pk = x; });
+      if (pk) {
+        if (k.eidosPortas === 'syromenes') {
+          var n = pk.temahia, pw = w / n, j;
+          for (j = 0; j < n; j++) {
+            var off = (j % 2) ? 10 : 0;
+            rect(x0 + j * pw + 3, yTop + 6 + off, pw - 6, h - 16, 2);
+            grammi(x0 + j * pw + pw / 2, yTop + h / 2 - 16 + off, x0 + j * pw + pw / 2, yTop + h / 2 + 16 + off, 4);
+          }
+        } else {
+          portes(x0 + 4, yTop + 4, w - 8, h - 8, pk.temahia);
+        }
+      }
+      etiketa({ platos: k.platos, ypsos: k.ypsos, bathos: k.bathos }, x0, yTop, w, h);
+      diastasi(x0, x0 + w, katoY + 40, 'σύνολο ' + K.nou(k.platos) + ' εκ.');
+      keim('ταβάνι ' + K.nou(k.ypsosTavaniou) + ' εκ. · ' + tm.n + (tm.n === 1 ? ' τμήμα' : ' τμήματα') +
+           ' · ' + (k.eidosPortas === 'syromenes' ? 'συρόμενες' : 'ανοιγόμενες'),
+           x0 + w / 2, katoY + 74, 22);
+    }
+
+    else if (z.eidos === 'banio') {
+      var xb = x0, synB = 0;
+      z.list.forEach(function (k) {
+        var w = k.platos * ppc, h = k.ypsos * ppc;
+        var yTop = katoY - 10 - h;
+        rect(xb, yTop, w, h, 4);
+        if (k.portes > 0) portes(xb + 4, yTop + 4, w - 8, h - 8, k.portes);
+        etiketa(k, xb, yTop, w, h);
+        xb += w; synB += k.platos;
+      });
+      diastasi(x0, x0 + synB * ppc, katoY + 40, 'σύνολο ' + K.nou(synB) + ' εκ.');
+      keim('κρεμαστό', x0 + (synB * ppc) / 2, katoY + 74, 22);
+    }
+  });
+
+  // υπογραφή
+  c.fillStyle = '#000';
+  keim((douleia.onoma ? douleia.onoma + ' · ' : '') + douleia.imerominia,
+       kanvas.width - PAD, kanvas.height - 22, 22, 'right');
+}
+
+/* ================== ΟΝΟΜΑ ΔΟΥΛΕΙΑΣ ================== */
+function etoimaseOnoma() {
+  document.getElementById('inOnoma').value = douleia.onoma || '';
+}
+function sozeOnoma(xoris) {
+  douleia.onoma = xoris ? '' : document.getElementById('inOnoma').value.trim();
+  sose();
+  pane('s-arxiki');
+  deixeSynexeia();
+}
+
+/* ================== ΑΡΧΙΚΗ: συνέχισε ================== */
+function deixeSynexeia() {
+  var d = document.getElementById('synexeia');
+  d.innerHTML = '';
+  if (douleies.length === 0) return;
+  var t = douleies[0];
+  var b = document.createElement('button');
+  b.className = 'mikroKoumpi';
+  b.style.marginTop = '20px';
+  b.textContent = 'ΣΥΝΕΧΙΣΕ: ' + (t.onoma || t.imerominia) + ' (' + t.koutia.length + ')';
+  b.onclick = function () { douleia = t; pane('s-douleia'); deixeDouleia(); };
+  d.appendChild(b);
+}
+
+/* ================== ΠΑΛΙΕΣ ΔΟΥΛΕΙΕΣ ================== */
+function deixePalies() {
+  var d = document.getElementById('paliesLista');
+  d.innerHTML = '';
+  if (douleies.length === 0) {
+    d.innerHTML = '<p class="kentro">Δεν υπάρχουν παλιές δουλειές.</p>';
+    return;
+  }
+  douleies.forEach(function (t) {
+    var div = document.createElement('div');
+    div.className = 'grammiKoutiou';
+    div.innerHTML = '<div class="tit">' + xml(t.onoma || 'Χωρίς όνομα') + '</div>' +
+      '<div class="ypo">' + t.imerominia + ' · ' + t.koutia.length + (t.koutia.length === 1 ? ' κουτί' : ' κουτιά') + '</div>';
+    var g = document.createElement('div');
+    g.className = 'duo';
+    g.appendChild(koumpi('ΑΝΟΙΞΕ', function () { douleia = t; pane('s-douleia'); deixeDouleia(); }));
+    g.appendChild(koumpi('ΣΒΗΣΙΜΟ', function () { rotaSbisimoDouleias(t); }));
+    div.appendChild(g);
+    d.appendChild(div);
+  });
+}
+
+function rotaSbisimoDouleias(t) {
+  document.getElementById('sbisimoTitlos').textContent = 'Να σβήσω τη δουλειά «' + (t.onoma || t.imerominia) + '»;';
+  var s = document.getElementById('s-sbisimo');
+  var nai = s.querySelector('button.gemato'), oxi = s.querySelectorAll('button')[1];
+  nai.onclick = function () {
+    douleies = douleies.filter(function (x) { return x.id !== t.id; });
+    grapse(KLEIDI_D, douleies);
+    if (douleia && douleia.id === t.id) douleia = null;
+    nai.onclick = sbiseTora; oxi.onclick = function () { pane('s-douleia'); deixeDouleia(); };
+    pane('s-palies'); deixePalies();
+  };
+  oxi.onclick = function () {
+    nai.onclick = sbiseTora; oxi.onclick = function () { pane('s-douleia'); deixeDouleia(); };
+    pane('s-palies'); deixePalies();
+  };
+  pane('s-sbisimo');
+}
+
+/* ================== ΡΥΘΜΙΣΕΙΣ ================== */
+var RYTHM_OMADES = [
+  ['ΠΑΧΗ ΥΛΙΚΩΝ', [
+    ['T', 'Πάχος κουτιού (μελαμίνη)'],
+    ['PLATI_T', 'Πάχος πλάτης'],
+    ['PORTA_T', 'Πάχος πόρτας (ακρυλικό)'],
+    ['GKINISIA_BATHOS', 'Βάθος γκινισιάς πλάτης'],
+    ['GKINISIA_MESA', 'Γκινισιά: πόσο μέσα από την πίσω άκρη']
+  ]],
+  ['ΠΟΡΤΕΣ', [
+    ['KENO_AKRO', 'Κενό στις έξω άκρες'],
+    ['KENO_MESA', 'Κενό ανάμεσα σε δύο πόρτες'],
+    ['DYO_PORTES_ANO', 'Δύο πόρτες όταν το πλάτος είναι πάνω από']
+  ]],
+  ['ΚΑΤΩ ΝΤΟΥΛΑΠΙ', [
+    ['KATO_YPSOS', 'Ύψος κουτιού'],
+    ['KATO_BATHOS', 'Βάθος'],
+    ['KATO_RAFIA', 'Ράφια'],
+    ['KATO_PODIA', 'Ύψος ποδιών'],
+    ['KATO_PAGKOS', 'Πάχος πάγκου'],
+    ['TRAVERSA_PLATOS', 'Πλάτος τραβέρσας'],
+    ['RAFI_KENO', 'Ράφι: πόσο στενότερο'],
+    ['RAFI_MEION_BATHOS', 'Ράφι: βάθος μείον']
+  ]],
+  ['ΣΥΡΤΑΡΙΑ (Blum TANDEMBOX)', [
+    ['SYRT_ARITHMOS', 'Πόσα συρτάρια'],
+    ['SYRT_T', 'Πάχος υλικού συρταριού'],
+    ['SYRT_ODIGOS', 'Μήκος οδηγού'],
+    ['SYRT_PISO_YPSOS', 'Ύψος πίσω συρταριού'],
+    ['SYRT_PATOS_MEION_MIKOS', 'Πάτος: μήκος οδηγού μείον'],
+    ['SYRT_PATOS_MEION_ES', 'Πάτος: εσωτερικό μείον'],
+    ['SYRT_PISO_MEION_ES', 'Πίσω: εσωτερικό μείον']
+  ]],
+  ['ΠΑΝΩ ΝΤΟΥΛΑΠΙ', [
+    ['PANO_YPSOS', 'Ύψος'],
+    ['PANO_BATHOS', 'Βάθος'],
+    ['PANO_RAFIA', 'Ράφια'],
+    ['PANO_KREMASMA', 'Σχέδιο: ύψος κρεμάσματος από το πάτωμα']
+  ]],
+  ['ΝΤΟΥΛΑΠΑ ΡΟΥΧΩΝ', [
+    ['NT_BATHOS', 'Βάθος'],
+    ['NT_PODIA', 'Ύψος ποδιών'],
+    ['NT_KATO_TAVANI', 'Κενό κάτω από το ταβάνι'],
+    ['NT_MAX_TMIMA', 'Μεγαλύτερο τμήμα'],
+    ['NT_RAFIA_TMIMA', 'Ράφια σε κάθε τμήμα'],
+    ['NT_PLATI_MEION', 'Πλάτη: πόσο μικρότερη'],
+    ['NT_BATHOS_MEION', 'Ράφια και χωρίσματα: βάθος μείον'],
+    ['NT_SYR_MEION_YPSOS', 'Συρόμενες: πόσο κοντότερες'],
+    ['NT_SYR_EPIKALYPSI', 'Συρόμενες: επικάλυψη']
+  ]],
+  ['ΜΠΑΝΙΟ', [
+    ['BANIO_YPSOS', 'Ύψος'],
+    ['BANIO_BATHOS', 'Βάθος'],
+    ['BANIO_RAFIA', 'Ράφια']
+  ]],
+  ['ΦΥΛΛΟ', [
+    ['FYLLO_MIKOS', 'Μήκος φύλλου'],
+    ['FYLLO_PLATOS', 'Πλάτος φύλλου'],
+    ['PRIONI', 'Πάχος πριονιού']
+  ]],
+  ['ΟΝΟΜΑΤΑ ΥΛΙΚΩΝ', [
+    ['YL_KOUTI', 'Κουτιά'],
+    ['YL_PLATI', 'Πλάτες'],
+    ['YL_SYRTARI', 'Συρτάρια'],
+    ['YL_PORTA', 'Πόρτες και μέτωπα'],
+    ['YL_BANIO', 'Μπάνιο'],
+    ['YL_BANIO_PLATI', 'Μπάνιο, πλάτη']
+  ]]
+];
+
+function anoixeRythmiseis() {
+  var tr = document.querySelectorAll('.skini'), i, trexousa = 's-arxiki';
+  for (i = 0; i < tr.length; i++) if (!tr[i].classList.contains('krifo')) trexousa = tr[i].id;
+  prinApoRythmiseis = trexousa;
+  var s = S(), h = '';
+  RYTHM_OMADES.forEach(function (om) {
+    h += '<div class="rthmOmada">' + om[0] + '</div>';
+    om[1].forEach(function (p) {
+      var keimeniko = (typeof s[p[0]] === 'string');
+      h += '<div class="rthmSeira"><label for="r_' + p[0] + '">' + p[1] + '</label>' +
+        '<input type="text" id="r_' + p[0] + '" class="' + (keimeniko ? 'keim' : '') + '"' +
+        (keimeniko ? '' : ' inputmode="decimal"') + ' autocomplete="off" value="' +
+        (keimeniko ? xml(s[p[0]]) : K.nou(s[p[0]])) + '"></div>';
+    });
+  });
+  document.getElementById('rythmPedia').innerHTML = h;
+  pane('s-rythmiseis');
+}
+
+function sozeRythmiseis() {
+  var s = S(), nea = {};
+  RYTHM_OMADES.forEach(function (om) {
+    om[1].forEach(function (p) {
+      var e = document.getElementById('r_' + p[0]);
+      if (!e) return;
+      if (typeof s[p[0]] === 'string') { if (e.value.trim()) nea[p[0]] = e.value.trim(); }
+      else {
+        var v = K.arithmos(e.value);
+        if (!isNaN(v)) nea[p[0]] = v;
+      }
+    });
+  });
+  R = nea;
+  grapse(KLEIDI_R, R);
+  // αν άλλαξε το ύψος ποδιών/ταβανιού, ξαναβγάζουμε τα ύψη των ντουλαπών
+  douleies.forEach(function (d) {
+    d.koutia.forEach(function (k) { K.ananeosiNtoulapas(k, R); });
+  });
+  grapse(KLEIDI_D, douleies);
+  alert('Οι ρυθμίσεις αποθηκεύτηκαν.');
+  pane(prinApoRythmiseis);
+  if (prinApoRythmiseis === 's-douleia') deixeDouleia();
+  if (prinApoRythmiseis === 's-kopi') deixeKopi();
+}
+
+function epanaforaRythmiseon() {
+  if (!confirm('Να γυρίσουν όλες οι ρυθμίσεις όπως ήταν από την αρχή;')) return;
+  R = {};
+  grapse(KLEIDI_R, R);
+  anoixeRythmiseis();
+}
+
+/* ================== ΞΕΚΙΝΑΜΕ ================== */
+deixeSynexeia();
+pane('s-arxiki');
+
+/* χωρίς ίντερνετ */
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+  navigator.serviceWorker.register('sw.js').catch(function () {});
+}
+</script>
+</body>
+</html>
